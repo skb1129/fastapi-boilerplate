@@ -25,15 +25,14 @@ postgres=# create database fastapi_db;
 
 Now, run the `prestart.sh` script that'll create the tables and add initial data.
 ```shell script
-export $(cat .env | xargs)
 ./prestart.sh
 ```
+If there are any changes to the `SQLALCHEMY_DATABASE_URI` key in the `.env` file, please run the `prestart.sh` script again.
 
 ### Running
 
 After all the above mentioned steps, you can start the application using the following command:
 ```shell script
-export $(cat .env | xargs)
 python -m app.main
 ```
 The application will be available at https://localhost:8000.
@@ -46,7 +45,6 @@ These instructions will provide you some useful information on developing this a
 
 If there are any changes to the SQLAlchemy ORM models, you can run the following command to generate `alembic` migrations.
 ```shell script
-export $(cat .env | xargs)
 alembic revision --autogenerate -m "<migration message>"
 ```
 This command will generate a new migration file in the `migrations` directory. Remember to check the generated migration file before committing.
@@ -54,16 +52,9 @@ This command will generate a new migration file in the `migrations` directory. R
 ## Testing
 
 The application unit tests are inside the `app/tests` module.
-First, run the `prestart.sh` script to initialise the test database.
+
+Run the following command in the terminal to execute the application unit tests.
 ```shell script
-export $(cat .env | xargs)
-export DATABASE_URL=<TEST_DATABASE_URL>
-./prestart.sh
-```
-Then, run the following command in the terminal to execute the application unit tests.
-```shell script
-export $(cat .env | xargs)
-export DATABASE_URL=<TEST_DATABASE_URL>
 pytest app/tests
 ```
 
