@@ -1,9 +1,8 @@
-import os
-
 from alembic import context
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
+from app.core import settings
 from app.database.base import Base
 
 # this is the Alembic Config object, which provides
@@ -25,10 +24,6 @@ target_metadata = Base.metadata
 # ... etc.
 
 
-def get_url():
-    return os.getenv("DATABASE_URL", "postgresql://localhost:5432/fastapi_db")
-
-
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -41,7 +36,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = get_url()
+    url = settings.SQLALCHEMY_DATABASE_URI
     context.configure(url=url, target_metadata=target_metadata, literal_binds=True,
                       dialect_opts={"paramstyle": "named"}, compare_type=True)
 
@@ -57,7 +52,7 @@ def run_migrations_online():
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_url()
+    configuration["sqlalchemy.url"] = settings.SQLALCHEMY_DATABASE_URI
     connectable = engine_from_config(configuration, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
     with connectable.connect() as connection:
