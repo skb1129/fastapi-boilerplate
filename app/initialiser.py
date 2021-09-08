@@ -1,9 +1,10 @@
 from app.database.initialise import initialise
-from app.database.session import SessionLocal
+from app.database.session import create_session, global_init
 
 
 def init() -> None:
-    db = SessionLocal()
+    global_init()
+    db = create_session()
     initialise(db)
 
 

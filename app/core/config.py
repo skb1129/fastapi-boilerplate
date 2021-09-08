@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "FastAPI"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     SQLALCHEMY_DATABASE_URI: str = "postgresql://localhost:5432/fastapi_db"
+    SQLALCHEMY_DATABASE_URI_ASYNC: str = "postgresql+asyncpg://localhost:5432/fastapi_db"
 
     class Config:
         env_file = ".env"

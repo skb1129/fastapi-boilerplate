@@ -4,13 +4,14 @@ import pytest
 
 from fastapi.testclient import TestClient
 
-from app.database.session import SessionLocal
+from app.database.session import create_session, global_init
 from app.main import app
 
 
 @pytest.fixture(scope="session")
 def db() -> Generator:
-    yield SessionLocal()
+    global_init()
+    yield create_session()
 
 
 @pytest.fixture(scope="module")
