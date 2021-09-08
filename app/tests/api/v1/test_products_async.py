@@ -5,7 +5,9 @@ from fastapi.testclient import TestClient
 from app.core import settings
 
 
-def test_create_product_async(client: TestClient, random_product: Dict[str, str]) -> None:
+def test_create_product_async(
+    client: TestClient, random_product: Dict[str, str]
+) -> None:
     response = client.post(f"{settings.API_V1_STR}/products_async", json=random_product)
     product = response.json()
     assert response.status_code == 200
@@ -29,7 +31,9 @@ def test_update_product(client: TestClient, random_product: Dict[str, str]) -> N
 
 
 def test_delete_product(client: TestClient, random_product: Dict[str, str]) -> None:
-    response = client.delete(f"{settings.API_V1_STR}/products_async?id={random_product.get('id')}")
+    response = client.delete(
+        f"{settings.API_V1_STR}/products_async?id={random_product.get('id')}"
+    )
     message = response.json()
     assert response.status_code == 200
     assert "message" in message

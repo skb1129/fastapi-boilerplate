@@ -16,7 +16,9 @@ def global_init():
     if __factory:
         return
     engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)
-    __async_engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI_ASYNC, pool_pre_ping=True)
+    __async_engine = create_async_engine(
+        settings.SQLALCHEMY_DATABASE_URI_ASYNC, pool_pre_ping=True
+    )
     __factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

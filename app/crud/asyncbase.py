@@ -29,7 +29,9 @@ class AsyncCRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         ret = result.scalar_one_or_none()
         return ret
 
-    async def get_multi(self, db: AsyncSession, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
+    async def get_multi(
+        self, db: AsyncSession, *, skip: int = 0, limit: int = 100
+    ) -> List[ModelType]:
         query = select(self.model).offset(skip).limit(limit)
         result = await db.execute(query)
         return result.scalars().all()
@@ -42,7 +44,13 @@ class AsyncCRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.refresh(db_obj)
         return db_obj
 
-    async def update(self, db: AsyncSession, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]) -> ModelType:
+    async def update(
+        self,
+        db: AsyncSession,
+        *,
+        db_obj: ModelType,
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+    ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
