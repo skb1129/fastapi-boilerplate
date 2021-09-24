@@ -29,9 +29,7 @@ class InterceptHandler(logging.Handler):
             frame = frame.f_back
             depth += 1
 
-        logger.opt(depth=depth, exception=record.exc_info).log(
-            level, record.getMessage()
-        )
+        logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
 
 def format_record(record: dict) -> str:
@@ -49,9 +47,7 @@ def format_record(record: dict) -> str:
 
     format_string = LOGURU_FORMAT
     if record["extra"].get("payload") is not None:
-        record["extra"]["payload"] = pformat(
-            record["extra"]["payload"], indent=4, compact=True, width=88
-        )
+        record["extra"]["payload"] = pformat(record["extra"]["payload"], indent=4, compact=True, width=88)
         format_string += "\n<level>{extra[payload]}</level>"
 
     format_string += "{exception}\n"
@@ -78,11 +74,7 @@ def init_logging():
     # disable handlers for specific uvicorn loggers
     # to redirect their output to the default uvicorn logger
     # works with uvicorn==0.11.6
-    loggers = (
-        logging.getLogger(name)
-        for name in logging.root.manager.loggerDict
-        if name.startswith("uvicorn.")
-    )
+    loggers = (logging.getLogger(name) for name in logging.root.manager.loggerDict if name.startswith("uvicorn."))
     for uvicorn_logger in loggers:
         uvicorn_logger.handlers = []
 
