@@ -1,18 +1,16 @@
 from typing import Any, List
-
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlmodel import Session
+from app.models import ProductResponse, ProductCreate, ProductUpdate, Message
 
-from app import schemas, crud
 from app.api.deps import get_db
+from app import crud
 
 router = APIRouter()
 
 
-@router.get("", response_model=List[schemas.ProductResponse])
-def read_products(
-    db: Session = Depends(get_db), skip: int = 0, limit: int = 100
-) -> Any:
+@router.get("", response_model=List[ProductResponse])
+def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100) -> Any:
     """
     Retrieve all products.
     """
@@ -20,10 +18,8 @@ def read_products(
     return products
 
 
-@router.post("", response_model=schemas.ProductResponse)
-def create_product(
-    *, db: Session = Depends(get_db), product_in: schemas.ProductCreate
-) -> Any:
+@router.post("", response_model=ProductResponse)
+def create_product(*, db: Session = Depends(get_db), product_in: ProductCreate) -> Any:
     """
     Create new products.
     """
@@ -31,10 +27,8 @@ def create_product(
     return product
 
 
-@router.put("", response_model=schemas.ProductResponse)
-def update_product(
-    *, db: Session = Depends(get_db), product_in: schemas.ProductUpdate
-) -> Any:
+@router.put("", response_model=ProductResponse)
+def update_product(*, db: Session = Depends(get_db), product_in: ProductUpdate) -> Any:
     """
     Update existing products.
     """
@@ -48,7 +42,7 @@ def update_product(
     return product
 
 
-@router.delete("", response_model=schemas.Message)
+@router.delete("", response_model=Message)
 def delete_product(*, db: Session = Depends(get_db), id: int) -> Any:
     """
     Delete existing product.

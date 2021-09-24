@@ -1,23 +1,35 @@
-from typing import Dict, Generator
-
 import pytest
-
+from typing import Generator, Dict
+from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel.pool import StaticPool
 from fastapi.testclient import TestClient
-
-from app.database.session import create_session, global_init
+from app.models import *
 from app.main import app
+from app.api.deps import get_db
 
 
-@pytest.fixture(scope="session")
-def db() -> Generator:
-    global_init()
-    yield create_session()
+@pytest.fixture(name="session")
+def session_fixture() -> Generator:
+    engine = create_engine(
+        "sqlite://",
+        echo=False,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        yield session
 
 
-@pytest.fixture(scope="module")
-def client() -> Generator:
-    with TestClient(app) as c:
-        yield c
+@pytest.fixture(name="client")
+def client_fixture(session: Session):
+    def get_db_override():
+        return session
+
+    app.dependency_overrides[get_db] = get_db_override
+    client = TestClient(app)
+    yield client
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture(scope="module")

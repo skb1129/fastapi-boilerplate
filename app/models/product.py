@@ -1,9 +1,27 @@
-from sqlalchemy import Column, Integer, String, Float
+from typing import Optional
+from sqlalchemy.sql.expression import table
+from sqlmodel import SQLModel, Field
 
-from app.database.base_class import Base
+
+class ProductBase(SQLModel):
+    name: Optional[str]
+    price: Optional[float]
 
 
-class Product(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    price = Column(Float, nullable=False)
+class Product(ProductBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+
+class ProductCreate(SQLModel):
+    name: str
+    price: float
+
+
+class ProductUpdate(ProductBase):
+    id: int
+
+
+class ProductResponse(SQLModel):
+    id: str
+    name: str
+    price: float
