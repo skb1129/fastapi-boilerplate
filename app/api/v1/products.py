@@ -10,7 +10,9 @@ router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.ProductResponse])
-def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100) -> Any:
+def read_products(
+    db: Session = Depends(get_db), skip: int = 0, limit: int = 100
+) -> Any:
     """
     Retrieve all products.
     """
@@ -19,7 +21,9 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 
 
 @router.post("", response_model=schemas.ProductResponse)
-def create_product(*, db: Session = Depends(get_db), product_in: schemas.ProductCreate) -> Any:
+def create_product(
+    *, db: Session = Depends(get_db), product_in: schemas.ProductCreate
+) -> Any:
     """
     Create new products.
     """
@@ -28,7 +32,9 @@ def create_product(*, db: Session = Depends(get_db), product_in: schemas.Product
 
 
 @router.put("", response_model=schemas.ProductResponse)
-def update_product(*, db: Session = Depends(get_db), product_in: schemas.ProductUpdate) -> Any:
+def update_product(
+    *, db: Session = Depends(get_db), product_in: schemas.ProductUpdate
+) -> Any:
     """
     Update existing products.
     """
