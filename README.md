@@ -1,6 +1,10 @@
 # FastAPI Boilerplate
 
 A template to start on FastAPI backend projects.
+This template has now been updated to include AsyncIO.
+
+## Features
+* Includes an example Product model implemented as Async and Synchronous side by side.
 
 ## Getting Started
 
@@ -72,6 +76,7 @@ Head over to the [Uvicorn Deployment](https://www.uvicorn.org/deployment/) docum
 ## Authors
 
 * **Surya Kant Bansal** - *Initial work* - [skb1129](https://github.com/skb1129)
+* **Urjeet Patel** - *Add AsyncIO support* - [violentmagician](https://github.com/violentmagician)
 
 ## License
 
