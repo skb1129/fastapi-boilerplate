@@ -9,4 +9,3 @@ engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, echo=False, connect_arg
 
 def create_db_and_tables():
     logger.info(f"Connecting to Database: {settings.SQLALCHEMY_DATABASE_URI}")
-    SQLModel.metadata.create_all(engine)
