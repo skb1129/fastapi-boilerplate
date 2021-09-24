@@ -25,3 +25,24 @@ def test_read_products(client: TestClient, session: Session, random_product: Dic
     products = response.json()
     assert response.status_code == 200
     assert len(products) > 0
+
+
+def test_update_product(client: TestClient, session: Session, random_product: Dict[str, str]) -> None:
+    # Add product to the test db
+    productIN = Product(name=random_product.get("name"), price=random_product.get("price"))
+    session.add(productIN)
+    session.commit()
+    session.refresh(productIN)
+    # update price and test
+    random_product["price"] = 100
+    response = client.put(f"{settings.API_V1_STR}/products", json=random_product)
+    product = response.json()
+    assert response.status_code == 200
+    assert product.get("price") == random_product.get("price")
+    # update with id only
+    random_product.pop("name", None)
+    random_product["price"] = 5000
+    response = client.put(f"{settings.API_V1_STR}/products", json=random_product)
+    product = response.json()
+    assert response.status_code == 200
+    assert product.get("price") == random_product.get("price")
