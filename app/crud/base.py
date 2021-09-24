@@ -17,18 +17,18 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
+    def get(self, db: Session, model_id: Any) -> Optional[ModelType]:
+        return db.get(self.model, model_id)
+
+    def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
+        return db.query(self.model).offset(skip).limit(limit).all()
+
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         db_obj: ModelType = self.model.from_orm(obj_in)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
-
-    def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
-        return db.query(self.model).offset(skip).limit(limit).all()
-
-    def get(self, db: Session, model_id: Any) -> Optional[ModelType]:
-        return db.get(self.model, model_id)
 
     def update(self, db: Session, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
