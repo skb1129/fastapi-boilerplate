@@ -3,14 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from app.models import ProductResponse, ProductCreate, ProductUpdate, Message
 
-from app.api.deps import get_session
+from app.api.deps import get_db
 from app import crud
 
 router = APIRouter()
 
 
 @router.post("", response_model=ProductResponse)
-def create_product(*, db: Session = Depends(get_session), product_in: ProductCreate) -> Any:
+def create_product(*, db: Session = Depends(get_db), product_in: ProductCreate) -> Any:
     """
     Create new products.
     """
@@ -19,7 +19,7 @@ def create_product(*, db: Session = Depends(get_session), product_in: ProductCre
 
 
 @router.get("", response_model=List[ProductResponse])
-def read_products(db: Session = Depends(get_session), skip: int = 0, limit: int = 100) -> Any:
+def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100) -> Any:
     """
     Retrieve all products.
     """
@@ -28,7 +28,7 @@ def read_products(db: Session = Depends(get_session), skip: int = 0, limit: int 
 
 
 @router.put("", response_model=ProductResponse)
-def update_product(*, db: Session = Depends(get_session), product_in: ProductUpdate) -> Any:
+def update_product(*, db: Session = Depends(get_db), product_in: ProductUpdate) -> Any:
     """
     Update existing products.
     """
@@ -43,7 +43,7 @@ def update_product(*, db: Session = Depends(get_session), product_in: ProductUpd
 
 
 @router.delete("", response_model=Message)
-def delete_product(*, db: Session = Depends(get_session), id: int) -> Any:
+def delete_product(*, db: Session = Depends(get_db), id: int) -> Any:
     """
     Delete existing product.
     """
