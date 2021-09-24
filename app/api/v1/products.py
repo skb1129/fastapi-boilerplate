@@ -1,7 +1,8 @@
 from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
-from app.models.product import ProductResponse, ProductCreate, ProductUpdate
+from app.models import ProductResponse, ProductCreate, ProductUpdate, Message
+
 from app.api.deps import get_session
 from app import crud
 
@@ -39,3 +40,18 @@ def update_product(*, db: Session = Depends(get_session), product_in: ProductUpd
         )
     product = crud.product.update(db, db_obj=product, obj_in=product_in)
     return product
+
+
+@router.delete("", response_model=Message)
+def delete_product(*, db: Session = Depends(get_session), id: int) -> Any:
+    """
+    Delete existing product.
+    """
+    product = crud.product.get(db, model_id=id)
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The product with this ID does not exist in the system.",
+        )
+    crud.product.remove(db, model_id=product.id)
+    return {"message": f"Product with ID = {id} deleted."}

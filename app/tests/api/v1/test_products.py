@@ -46,3 +46,15 @@ def test_update_product(client: TestClient, session: Session, random_product: Di
     product = response.json()
     assert response.status_code == 200
     assert product.get("price") == random_product.get("price")
+
+
+def test_delete_product(client: TestClient, session: Session, random_product: Dict[str, str]) -> None:
+    productIN = Product(name=random_product.get("name"), price=random_product.get("price"))
+    session.add(productIN)
+    session.commit()
+    session.refresh(productIN)
+
+    response = client.delete(f"{settings.API_V1_STR}/products?id={random_product.get('id')}")
+    message = response.json()
+    assert response.status_code == 200
+    assert "message" in message
