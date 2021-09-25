@@ -1,11 +1,7 @@
-from typing import Generator
+from sqlmodel import Session
+from app.database.session import engine
 
-from app.database.session import SessionLocal
 
-
-def get_db() -> Generator:
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
+def get_db():
+    with Session(engine) as session:
+        yield session
